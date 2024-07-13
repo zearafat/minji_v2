@@ -6,12 +6,31 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct useminji_3App: App {
+    
+    var sharedModelContainer: ModelContainer = {
+        let scheme = Schema([
+            Project.self,
+            Client.self,
+        ])
+        
+        let modelConfiguration = ModelConfiguration(schema: scheme, isStoredInMemoryOnly: false)
+        
+        do {
+            return try ModelContainer(for: scheme, configurations: modelConfiguration)
+        } catch {
+            fatalError("DEBUG: Could not create data \(error)")
+        }
+    }()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashScreenView()
+                .preferredColorScheme(.light)
         }
+        .modelContainer(sharedModelContainer)
     }
 }
